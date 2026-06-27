@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import WaterTexture from './WaterTexture.astro';
 import { getContent } from '@/i18n/content';
 import type { Lang } from '@/i18n/ui';
 
@@ -10,28 +11,31 @@ const { lang } = Astro.props;
 const c = getContent(lang);
 const icons = ['droplet', 'phone', 'truck'] as const;
 ---
-<section class="container-x py-16 lg:py-24">
-  <div class="flex flex-col items-center text-center">
-    <h2 class="text-3xl font-extrabold tracking-tight text-navy-900 sm:text-4xl">{c.home.howItWorks.title}</h2>
-    <p class="mt-3 max-w-xl text-navy-900/65">{c.home.howItWorks.subtitle}</p>
-  </div>
+<section class="relative overflow-hidden py-16 lg:py-24">
+  <WaterTexture />
+  <div class="container-x relative">
+    <div class="flex flex-col items-center text-center">
+      <h2 class="text-3xl font-extrabold tracking-tight text-navy-900 sm:text-4xl">{c.home.howItWorks.title}</h2>
+      <p class="mt-3 max-w-xl text-navy-900/65">{c.home.howItWorks.subtitle}</p>
+    </div>
 
-  <ol class="relative mt-14 grid gap-10 md:grid-cols-3">
-    <!-- connecting line (desktop) -->
-    <div class="absolute left-0 right-0 top-7 hidden h-px bg-gradient-to-r from-aqua-100 via-aqua-300 to-aqua-100 md:block" aria-hidden="true"></div>
-    {
-      c.home.howItWorks.steps.map((step, i) => (
-        <li class="relative flex flex-col items-center text-center">
-          <div class="relative flex h-14 w-14 items-center justify-center rounded-full bg-aqua-500 text-white shadow-lg shadow-aqua-500/25">
-            <Icon name={icons[i] ?? 'droplet'} class="h-6 w-6" />
-            <span class="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-navy-900 text-xs font-bold text-white">
-              {i + 1}
-            </span>
-          </div>
-          <h3 class="mt-5 text-lg font-bold text-navy-900">{step.title}</h3>
-          <p class="mt-2 max-w-xs text-sm leading-relaxed text-navy-900/65">{step.text}</p>
-        </li>
-      ))
-    }
-  </ol>
+    <ol class="relative mt-14 grid gap-10 md:grid-cols-3">
+      <!-- connecting line (desktop) -->
+      <div class="absolute left-0 right-0 top-7 hidden h-px bg-gradient-to-r from-aqua-100 via-aqua-300 to-aqua-100 md:block" aria-hidden="true"></div>
+      {
+        c.home.howItWorks.steps.map((step, i) => (
+          <li class="relative flex flex-col items-center text-center">
+            <div class="relative flex h-14 w-14 items-center justify-center rounded-full bg-aqua-500 text-white shadow-lg shadow-aqua-500/25">
+              <Icon name={icons[i] ?? 'droplet'} class="h-6 w-6" />
+              <span class="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-navy-900 text-xs font-bold text-white">
+                {i + 1}
+              </span>
+            </div>
+            <h3 class="mt-5 text-lg font-bold text-navy-900">{step.title}</h3>
+            <p class="mt-2 max-w-xs text-sm leading-relaxed text-navy-900/65">{step.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
 </section>

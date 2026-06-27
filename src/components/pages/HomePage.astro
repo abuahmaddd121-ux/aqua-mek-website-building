@@ -7,12 +7,15 @@ import ProductCard from '@/components/ProductCard.astro';
 import HowItWorks from '@/components/HowItWorks.astro';
 import WhyBottle from '@/components/WhyBottle.astro';
 import TrustSection from '@/components/TrustSection.astro';
+import WaterTexture from '@/components/WaterTexture.astro';
 import { getContent } from '@/i18n/content';
 import { localizePath, type Lang } from '@/i18n/ui';
 import { products, links, brand } from '@/data/business';
 import heroBg from '@/assets/backgrounds/hero-bg.jpg';
 import heroBottle from '@/assets/backgrounds/hero-bottle.png';
 import heroSplash from '@/assets/backgrounds/hero-splash.png';
+import sourceBg from '@/assets/backgrounds/bg-source-dark.jpg';
+import ctaBg from '@/assets/backgrounds/bg-cta.jpg';
 
 // Slow-rising bubbles (right side only, so the left stays clean for text).
 const bubbles = [
@@ -137,14 +140,17 @@ const offerItems = [
   <WhyBottle lang={lang} />
 
   <!-- SOURCE TEASER -->
-  <section class="source-dark relative overflow-hidden bg-navy-900 text-white">
-    <!-- subtle animated backdrop -->
-    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
-      <div class="source-glow source-glow-1"></div>
-      <div class="source-glow source-glow-2"></div>
-      <div class="source-caustics"></div>
-      <Image src={heroBottle} alt="" width={520} height={680} class="source-silhouette" />
-    </div>
+  <section class="relative overflow-hidden bg-navy-900 text-white">
+    <Image
+      src={sourceBg}
+      alt=""
+      aria-hidden="true"
+      widths={[768, 1280, 1920, 2752]}
+      sizes="100vw"
+      class="absolute inset-0 h-full w-full object-cover"
+    />
+    <!-- navy veil: darker on the left for text, clearer scene on the right -->
+    <div class="absolute inset-0 bg-gradient-to-r from-navy-950/92 via-navy-900/80 to-navy-900/40"></div>
     <div class="container-x relative grid items-center gap-10 py-16 lg:grid-cols-2 lg:py-24">
       <div>
         <span class="inline-flex items-center gap-2 text-sm font-semibold text-aqua-300">
@@ -178,19 +184,22 @@ const offerItems = [
   </section>
 
   <!-- PRODUCTS TEASER -->
-  <section class="container-x py-16 lg:py-24">
-    <div class="flex flex-col items-center text-center">
-      <h2 class="text-3xl font-extrabold tracking-tight text-navy-900 sm:text-4xl">{c.home.productsTeaserTitle}</h2>
-      <p class="mt-3 max-w-xl text-navy-900/65">{c.home.productsTeaserSubtitle}</p>
-    </div>
-    <div class="mt-12 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-6">
-      {products.map((p) => <ProductCard product={p} lang={lang} />)}
-    </div>
-    <div class="mt-10 text-center">
-      <Button href={localizePath('/products', lang)} variant="secondary" size="lg">
-        {c.cta.viewProducts}
-        <Icon name="arrow-right" class="h-5 w-5" />
-      </Button>
+  <section class="relative overflow-hidden py-16 lg:py-24">
+    <WaterTexture />
+    <div class="container-x relative">
+      <div class="flex flex-col items-center text-center">
+        <h2 class="text-3xl font-extrabold tracking-tight text-navy-900 sm:text-4xl">{c.home.productsTeaserTitle}</h2>
+        <p class="mt-3 max-w-xl text-navy-900/65">{c.home.productsTeaserSubtitle}</p>
+      </div>
+      <div class="mt-12 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-6">
+        {products.map((p) => <ProductCard product={p} lang={lang} />)}
+      </div>
+      <div class="mt-10 text-center">
+        <Button href={localizePath('/products', lang)} variant="secondary" size="lg">
+          {c.cta.viewProducts}
+          <Icon name="arrow-right" class="h-5 w-5" />
+        </Button>
+      </div>
     </div>
   </section>
 
@@ -221,8 +230,17 @@ const offerItems = [
   </section>
 
   <!-- CTA BAND -->
-  <section class="bg-gradient-to-r from-aqua-600 to-aqua-500">
-    <div class="container-x flex flex-col items-center gap-6 py-14 text-center lg:flex-row lg:justify-between lg:text-left">
+  <section class="relative overflow-hidden">
+    <Image
+      src={ctaBg}
+      alt=""
+      aria-hidden="true"
+      widths={[768, 1280, 2172]}
+      sizes="100vw"
+      class="absolute inset-0 h-full w-full object-cover"
+    />
+    <div class="absolute inset-0 bg-gradient-to-r from-aqua-600/90 to-aqua-500/80"></div>
+    <div class="container-x relative flex flex-col items-center gap-6 py-14 text-center lg:flex-row lg:justify-between lg:text-left">
       <div>
         <h2 class="text-2xl font-extrabold text-white sm:text-3xl">{c.home.ctaBand.title}</h2>
         <p class="mt-2 max-w-xl text-white/85">{c.home.ctaBand.text}</p>
@@ -327,67 +345,12 @@ const offerItems = [
     100% { transform: translateY(-360px) scale(1); opacity: 0; }
   }
 
-  /* Source teaser dark polish */
-  .source-glow {
-    position: absolute;
-    border-radius: 9999px;
-    filter: blur(64px);
-  }
-  .source-glow-1 {
-    width: 26rem;
-    height: 26rem;
-    top: -7rem;
-    left: -5rem;
-    background: radial-gradient(circle, rgba(54, 186, 246, 0.5), transparent 70%);
-    animation: glowFloat1 16s ease-in-out infinite alternate;
-  }
-  .source-glow-2 {
-    width: 22rem;
-    height: 22rem;
-    bottom: -7rem;
-    right: 18%;
-    background: radial-gradient(circle, rgba(12, 162, 230, 0.4), transparent 70%);
-    animation: glowFloat2 20s ease-in-out infinite alternate;
-  }
-  .source-caustics {
-    position: absolute;
-    inset: 0;
-    background-image: repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 28px);
-    mix-blend-mode: screen;
-    opacity: 0.6;
-    animation: causticsDrift 16s linear infinite;
-  }
-  .source-silhouette {
-    position: absolute;
-    right: -2rem;
-    bottom: -3rem;
-    height: 118%;
-    width: auto;
-    object-fit: contain;
-    opacity: 0.06;
-    filter: blur(2px);
-  }
-  @keyframes glowFloat1 {
-    from { transform: translate(0, 0); }
-    to { transform: translate(32px, 22px); }
-  }
-  @keyframes glowFloat2 {
-    from { transform: translate(0, 0); }
-    to { transform: translate(-30px, -16px); }
-  }
-  @keyframes causticsDrift {
-    from { background-position: 0 0; }
-    to { background-position: 220px 90px; }
-  }
-
   /* Accessibility: kill all hero motion for users who prefer reduced motion */
   @media (prefers-reduced-motion: reduce) {
     .hero-bg,
     .hero-bottle-wrap,
     .hero-bottle,
-    .hero-splash,
-    .source-glow,
-    .source-caustics {
+    .hero-splash {
       animation: none !important;
     }
     .hero-bg,

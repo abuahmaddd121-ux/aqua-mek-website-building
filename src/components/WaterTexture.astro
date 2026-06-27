@@ -1,0 +1,19 @@
+---
+/** Faint water-caustics texture for light sections. Place as the first child of a
+ *  `relative overflow-hidden` section, with the real content in a `relative` wrapper. */
+import { Image } from 'astro:assets';
+import tex from '@/assets/backgrounds/tex-water.png';
+
+interface Props {
+  class?: string;
+}
+const { class: className = 'opacity-70' } = Astro.props;
+---
+<Image
+  src={tex}
+  alt=""
+  aria-hidden="true"
+  widths={[768, 1280, 2048]}
+  sizes="100vw"
+  class={`pointer-events-none absolute inset-0 h-full w-full object-cover ${className}`}
+/>

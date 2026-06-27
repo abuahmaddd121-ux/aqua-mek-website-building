@@ -1,13 +1,27 @@
 ---
+import { Image } from 'astro:assets';
+import pageheaderBg from '@/assets/backgrounds/bg-pageheader.jpg';
+
 interface Props {
   title: string;
   subtitle?: string;
 }
 const { title, subtitle } = Astro.props;
 ---
-<section class="border-b border-aqua-100 bg-gradient-to-b from-aqua-50 to-white">
-  <div class="container-x py-14 text-center lg:py-20">
-    <h1 class="text-4xl font-extrabold tracking-tight text-navy-900 sm:text-5xl">{title}</h1>
-    {subtitle && <p class="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-navy-900/70">{subtitle}</p>}
+<section class="relative overflow-hidden border-b border-aqua-100">
+  <Image
+    src={pageheaderBg}
+    alt=""
+    aria-hidden="true"
+    widths={[768, 1280, 1920]}
+    sizes="100vw"
+    class="absolute inset-0 h-full w-full object-cover"
+    loading="eager"
+  />
+  <!-- light veil so the navy title stays readable over the water -->
+  <div class="absolute inset-0 bg-gradient-to-b from-white/70 via-white/55 to-white/80"></div>
+  <div class="container-x relative py-16 text-center lg:py-24">
+    <h1 class="text-4xl font-extrabold tracking-tight text-navy-900 drop-shadow-sm sm:text-5xl">{title}</h1>
+    {subtitle && <p class="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-navy-900/75">{subtitle}</p>}
   </div>
 </section>
