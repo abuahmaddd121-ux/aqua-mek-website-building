@@ -1,0 +1,50 @@
+---
+import Base from '@/layouts/Base.astro';
+import PageHero from '@/components/PageHero.astro';
+import Icon from '@/components/Icon.astro';
+import Button from '@/components/Button.astro';
+import { getContent } from '@/i18n/content';
+import { localizePath, type Lang } from '@/i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const c = getContent(lang);
+const meta = c.meta.quality;
+const pointIcons = ['mountain', 'beaker', 'shield', 'droplet'] as const;
+---
+<Base lang={lang} title={meta.title} description={meta.description} path="/quality">
+  <PageHero title={c.quality.title} subtitle={c.quality.intro} />
+
+  <section class="container-x py-16 lg:py-24">
+    <div class="grid gap-6 sm:grid-cols-2">
+      {
+        c.quality.points.map((p, i) => (
+          <div class="flex gap-4 rounded-2xl border border-navy-900/5 bg-white p-7 shadow-sm">
+            <div class="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-aqua-50 text-aqua-600">
+              <Icon name={pointIcons[i] ?? 'check'} class="h-6 w-6" />
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-navy-900">{p.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-navy-900/65">{p.text}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- storage / shelf-life strip -->
+    <div class="mt-10 flex flex-col items-center gap-3 rounded-2xl bg-aqua-50 px-6 py-6 text-center ring-1 ring-aqua-100 sm:flex-row sm:justify-center sm:gap-4 sm:text-left">
+      <Icon name="clock" class="h-6 w-6 text-aqua-600" />
+      <p class="text-navy-900/80">{c.quality.closing}</p>
+    </div>
+
+    <div class="mt-12 text-center">
+      <Button href={localizePath('/water', lang)} variant="secondary" size="lg">
+        <Icon name="beaker" class="h-5 w-5" />
+        {c.water.compositionTitle}
+      </Button>
+    </div>
+  </section>
+</Base>

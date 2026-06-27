@@ -1,0 +1,147 @@
+---
+import Base from '@/layouts/Base.astro';
+import PageHero from '@/components/PageHero.astro';
+import Icon from '@/components/Icon.astro';
+import { getContent } from '@/i18n/content';
+import type { Lang } from '@/i18n/ui';
+import { brand, links } from '@/data/business';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const c = getContent(lang);
+const meta = c.meta.contact;
+
+const contactRows = [
+  { icon: 'phone' as const, label: c.contact.phoneLabel, value: brand.phoneDisplay, href: links.tel },
+  { icon: 'whatsapp' as const, label: 'WhatsApp', value: brand.phoneDisplay, href: links.whatsapp, external: true },
+  { icon: 'viber' as const, label: 'Viber', value: brand.phoneDisplay, href: links.viber },
+  { icon: 'mail' as const, label: c.contact.emailLabel, value: brand.email, href: links.email },
+  { icon: 'clock' as const, label: c.contact.hoursLabel, value: c.contact.hoursValue },
+  { icon: 'pin' as const, label: c.contact.cityLabel, value: c.contact.cityValue },
+];
+---
+<Base lang={lang} title={meta.title} description={meta.description} path="/contact">
+  <PageHero title={c.contact.title} subtitle={c.contact.subtitle} />
+
+  <section class="container-x py-16 lg:py-24">
+    <div class="grid gap-10 lg:grid-cols-2">
+      <!-- details -->
+      <div>
+        <ul class="space-y-4">
+          {
+            contactRows.map((row) => {
+              const inner = (
+                <>
+                  <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-aqua-50 text-aqua-600">
+                    <Icon name={row.icon} class="h-5 w-5" />
+                  </span>
+                  <span>
+                    <span class="block text-xs font-semibold uppercase tracking-wide text-navy-900/45">{row.label}</span>
+                    <span class="block font-semibold text-navy-900">{row.value}</span>
+                  </span>
+                </>
+              );
+              return (
+                <li>
+                  {row.href ? (
+                    <a
+                      href={row.href}
+                      {...(row.external ? { target: '_blank', rel: 'noopener' } : {})}
+                      class="flex items-center gap-4 rounded-2xl border border-navy-900/5 bg-white p-4 shadow-sm transition-colors hover:border-aqua-200 hover:bg-aqua-50/40"
+                    >
+                      {inner}
+                    </a>
+                  ) : (
+                    <div class="flex items-center gap-4 rounded-2xl border border-navy-900/5 bg-white p-4 shadow-sm">
+                      {inner}
+                    </div>
+                  )}
+                </li>
+              );
+            })
+          }
+        </ul>
+      </div>
+
+      <!-- order form -->
+      <div class="rounded-3xl border border-navy-900/5 bg-white p-7 shadow-sm sm:p-9">
+        <h2 class="text-2xl font-extrabold tracking-tight text-navy-900">{c.contact.formTitle}</h2>
+        <form
+          id="order-form"
+          class="mt-6 space-y-4"
+          data-whatsapp={links.whatsapp}
+          data-name-label={c.contact.formName}
+          data-phone-label={c.contact.formPhone}
+        >
+          <div>
+            <label for="name" class="mb-1.5 block text-sm font-medium text-navy-900/80">{c.contact.formName}</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              required
+              class="w-full rounded-xl border border-navy-900/10 bg-aqua-50/40 px-4 py-3 text-navy-900 outline-none transition focus:border-aqua-400 focus:bg-white focus:ring-2 focus:ring-aqua-200"
+            />
+          </div>
+          <div>
+            <label for="phone" class="mb-1.5 block text-sm font-medium text-navy-900/80">{c.contact.formPhone}</label>
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              required
+              class="w-full rounded-xl border border-navy-900/10 bg-aqua-50/40 px-4 py-3 text-navy-900 outline-none transition focus:border-aqua-400 focus:bg-white focus:ring-2 focus:ring-aqua-200"
+            />
+          </div>
+          <div>
+            <label for="message" class="mb-1.5 block text-sm font-medium text-navy-900/80">{c.contact.formMessage}</label>
+            <textarea
+              id="message"
+              name="message"
+              rows="4"
+              class="w-full rounded-xl border border-navy-900/10 bg-aqua-50/40 px-4 py-3 text-navy-900 outline-none transition focus:border-aqua-400 focus:bg-white focus:ring-2 focus:ring-aqua-200"
+            ></textarea>
+          </div>
+          <button
+            type="submit"
+            class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3.5 font-semibold text-white shadow-lg shadow-[#25D366]/25 transition-colors hover:bg-[#1ebe5d]"
+          >
+            <Icon name="whatsapp" class="h-5 w-5" />
+            {c.contact.formSubmit}
+          </button>
+          <p class="text-center text-xs text-navy-900/50">{c.contact.formNote}</p>
+        </form>
+      </div>
+    </div>
+
+    <!-- service-area banner -->
+    <div class="mt-10 flex flex-col items-center gap-4 rounded-3xl bg-gradient-to-r from-aqua-600 to-aqua-500 px-6 py-10 text-center text-white sm:flex-row sm:justify-center sm:gap-5 sm:text-left">
+      <span class="inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/15">
+        <Icon name="truck" class="h-7 w-7" />
+      </span>
+      <div>
+        <p class="text-xl font-extrabold">{c.offers.freeDelivery.title}</p>
+        <p class="text-white/85">{c.contact.cityValue}</p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const form = document.getElementById('order-form') as HTMLFormElement | null;
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const nameLabel = form.dataset.nameLabel ?? 'Name';
+    const phoneLabel = form.dataset.phoneLabel ?? 'Phone';
+    const lines = [
+      data.get('name') && `${nameLabel}: ${data.get('name')}`,
+      data.get('phone') && `${phoneLabel}: ${data.get('phone')}`,
+      data.get('message'),
+    ].filter(Boolean);
+    const base = form.dataset.whatsapp ?? '';
+    window.open(`${base}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
+  });
+</script>

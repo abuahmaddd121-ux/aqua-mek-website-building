@@ -1,0 +1,94 @@
+---
+import Base from '@/layouts/Base.astro';
+import PageHero from '@/components/PageHero.astro';
+import Icon from '@/components/Icon.astro';
+import Button from '@/components/Button.astro';
+import { getContent } from '@/i18n/content';
+import { localizePath, type Lang } from '@/i18n/ui';
+import { minerals } from '@/data/business';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const c = getContent(lang);
+const meta = c.meta.water;
+const unitLabel = (u: (typeof minerals)[number]['unit']) => c.units[u];
+---
+<Base lang={lang} title={meta.title} description={meta.description} path="/water">
+  <PageHero title={c.water.title} subtitle={c.water.intro} />
+
+  <!-- STORY + HIGHLIGHTS -->
+  <section class="container-x py-16 lg:py-24">
+    <div class="grid gap-12 lg:grid-cols-2 lg:items-center">
+      <div class="space-y-5">
+        <span class="inline-flex items-center gap-2 text-sm font-semibold text-aqua-600">
+          <Icon name="mountain" class="h-5 w-5" />
+          {c.tagline}
+        </span>
+        {c.water.story.map((p) => <p class="text-lg leading-relaxed text-navy-900/75">{p}</p>)}
+      </div>
+      <div class="grid gap-4 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+        {
+          c.water.highlights.map((h) => (
+            <div class="rounded-2xl bg-aqua-50 p-6 text-center ring-1 ring-aqua-100">
+              <p class="text-3xl font-extrabold text-aqua-600">{h.value}</p>
+              <p class="mt-2 text-sm font-medium text-navy-900/70">{h.label}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPOSITION TABLE -->
+  <section class="bg-aqua-50/60 py-16 lg:py-24">
+    <div class="container-x max-w-3xl">
+      <div class="flex flex-col items-center text-center">
+        <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-aqua-500 text-white">
+          <Icon name="beaker" class="h-6 w-6" />
+        </div>
+        <h2 class="mt-4 text-3xl font-extrabold tracking-tight text-navy-900">{c.water.compositionTitle}</h2>
+        <p class="mt-2 text-sm text-navy-900/60">{c.water.compositionNote}</p>
+      </div>
+
+      <div class="mt-10 overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-navy-900/5">
+        <table class="w-full text-left">
+          <thead>
+            <tr class="border-b border-navy-900/5 text-xs uppercase tracking-wide text-navy-900/50">
+              <th class="px-6 py-4 font-semibold">{c.water.colName}</th>
+              <th class="px-6 py-4 text-right font-semibold">{c.water.colValue}</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-navy-900/5">
+            {
+              minerals.map((m) => (
+                <tr class="transition-colors hover:bg-aqua-50/50">
+                  <td class="px-6 py-3.5">
+                    <span class="font-medium text-navy-900">{c.mineralNames[m.key]}</span>
+                    {m.formula && (
+                      <span class="ml-2 rounded bg-aqua-50 px-1.5 py-0.5 font-mono text-xs text-aqua-700">
+                        {m.formula}
+                      </span>
+                    )}
+                  </td>
+                  <td class="px-6 py-3.5 text-right font-semibold text-navy-900 tabular-nums">
+                    {m.value}
+                    {unitLabel(m.unit) && <span class="ml-1 text-xs font-normal text-navy-900/50">{unitLabel(m.unit)}</span>}
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-10 text-center">
+        <Button href={localizePath('/products', lang)} variant="primary" size="lg">
+          {c.cta.viewProducts}
+          <Icon name="arrow-right" class="h-5 w-5" />
+        </Button>
+      </div>
+    </div>
+  </section>
+</Base>

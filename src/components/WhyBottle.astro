@@ -1,0 +1,112 @@
+---
+import { Image } from 'astro:assets';
+import { getContent } from '@/i18n/content';
+import type { Lang } from '@/i18n/ui';
+import { brand } from '@/data/business';
+import bottle from '@/assets/backgrounds/bottle-trim.png';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const c = getContent(lang);
+---
+<section class="bg-white" data-why>
+  <div class="container-x lg:grid lg:grid-cols-2 lg:gap-12">
+    <!-- bottle (first in DOM → shows on top on mobile; placed right on desktop) -->
+    <div class="lg:col-start-2 lg:row-start-1">
+      <div class="why-bottle-sticky flex items-center justify-center py-8 lg:sticky lg:top-24 lg:h-[calc(100vh-6rem)] lg:py-0">
+        <div class="relative flex items-center justify-center">
+          <div class="absolute h-64 w-64 rounded-full bg-aqua-200/45 blur-3xl lg:h-80 lg:w-80"></div>
+          <Image
+            src={bottle}
+            alt={`${brand.name} 19 L`}
+            widths={[280, 360, 540]}
+            sizes="(min-width: 1024px) 26vw, 55vw"
+            class="why-bottle-img relative max-h-72 w-auto max-w-full object-contain drop-shadow-2xl lg:max-h-[70vh]"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- steps -->
+    <div class="lg:col-start-1 lg:row-start-1 lg:py-24">
+      <h2 class="text-3xl font-extrabold tracking-tight text-navy-900 sm:text-4xl">{c.home.valuePropsTitle}</h2>
+      <div class="mt-8 space-y-5 lg:mt-0 lg:space-y-0">
+        {
+          c.home.whySteps.map((step, i) => (
+            <div
+              class="why-step rounded-2xl border border-navy-900/5 bg-white p-6 shadow-sm lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none"
+              data-why-step
+            >
+              <div class="flex items-center gap-3">
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-aqua-500 text-sm font-bold text-white">
+                  {i + 1}
+                </span>
+                <h3 class="text-xl font-bold text-navy-900 lg:text-2xl">{step.title}</h3>
+              </div>
+              <p class="mt-3 text-navy-900/70 lg:text-lg lg:leading-relaxed">{step.text}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .why-bottle-img {
+    transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+    will-change: transform;
+  }
+  @media (min-width: 1024px) {
+    .why-step {
+      display: flex;
+      min-height: 56vh;
+      flex-direction: column;
+      justify-content: center;
+      opacity: 0.35;
+      transition: opacity 0.45s ease;
+    }
+    .why-step.is-active {
+      opacity: 1;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .why-step {
+      opacity: 1 !important;
+    }
+    .why-bottle-img {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const section = document.querySelector<HTMLElement>('[data-why]');
+  if (section) {
+    const steps = Array.from(section.querySelectorAll<HTMLElement>('[data-why-step]'));
+    const bottle = section.querySelector<HTMLElement>('[data-why-bottle], .why-bottle-img');
+    const motionOK = matchMedia('(prefers-reduced-motion: no-preference)').matches;
+
+    const setActive = (idx: number) => {
+      steps.forEach((s, i) => s.classList.toggle('is-active', i === idx));
+      if (bottle && motionOK) {
+        const scale = 1 + idx * 0.02;
+        const rot = (idx - (steps.length - 1) / 2) * 1.4;
+        bottle.style.transform = `scale(${scale.toFixed(3)}) rotate(${rot.toFixed(2)}deg)`;
+      }
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(steps.indexOf(e.target as HTMLElement));
+        });
+      },
+      { rootMargin: '-45% 0px -45% 0px', threshold: 0 }
+    );
+    steps.forEach((s) => io.observe(s));
+    setActive(0);
+  }
+</script>

@@ -1,0 +1,46 @@
+---
+import Icon from './Icon.astro';
+import { getContent } from '@/i18n/content';
+import type { Lang } from '@/i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const c = getContent(lang);
+const t = c.home.trustSection;
+const pointIcons = ['shield', 'beaker', 'droplet'] as const;
+---
+<section class="container-x py-16 lg:py-24">
+  <div class="flex flex-col items-center text-center">
+    <h2 class="text-3xl font-extrabold tracking-tight text-navy-900 sm:text-4xl">{t.title}</h2>
+    <p class="mt-3 max-w-xl text-navy-900/65">{t.subtitle}</p>
+  </div>
+
+  <div class="mt-12 grid gap-6 md:grid-cols-3">
+    {
+      t.points.map((p, i) => (
+        <div class="flex gap-4 rounded-2xl border border-navy-900/5 bg-white p-6 shadow-sm">
+          <div class="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-aqua-50 text-aqua-600">
+            <Icon name={pointIcons[i] ?? 'check'} class="h-6 w-6" />
+          </div>
+          <div>
+            <h3 class="font-bold text-navy-900">{p.title}</h3>
+            <p class="mt-1.5 text-sm leading-relaxed text-navy-900/65">{p.text}</p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  <!-- modest certificate placeholder (swap in the real document when available) -->
+  <div class="mx-auto mt-8 flex max-w-2xl items-center gap-4 rounded-2xl border border-dashed border-navy-900/15 bg-aqua-50/40 px-6 py-5">
+    <div class="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white text-navy-700 ring-1 ring-navy-900/5">
+      <Icon name="certificate" class="h-6 w-6" />
+    </div>
+    <div>
+      <p class="text-sm font-bold text-navy-900">{t.certTitle}</p>
+      <p class="mt-0.5 text-sm text-navy-900/55">{t.certText}</p>
+    </div>
+  </div>
+</section>

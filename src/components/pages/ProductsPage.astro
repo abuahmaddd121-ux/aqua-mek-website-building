@@ -1,0 +1,96 @@
+---
+import { Image } from 'astro:assets';
+import Base from '@/layouts/Base.astro';
+import PageHero from '@/components/PageHero.astro';
+import Icon from '@/components/Icon.astro';
+import Button from '@/components/Button.astro';
+import ProductCard from '@/components/ProductCard.astro';
+import { getContent } from '@/i18n/content';
+import { localizePath, type Lang } from '@/i18n/ui';
+import {
+  products,
+  links,
+  brand,
+  dispenserImage,
+  dispenserCleaningPrice,
+  freeDispenserThreshold,
+} from '@/data/business';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const c = getContent(lang);
+const meta = c.meta.products;
+
+const retail = products.filter((p) => p.group === 'retail');
+const delivery = products.filter((p) => p.group === 'delivery');
+---
+<Base lang={lang} title={meta.title} description={meta.description} path="/products">
+  <PageHero title={c.products.title} subtitle={c.products.subtitle} />
+
+  <section class="container-x py-16 lg:py-20">
+    <!-- retail -->
+    <h2 class="text-2xl font-extrabold tracking-tight text-navy-900">{c.products.groups.retail}</h2>
+    <div class="mt-6 grid grid-cols-2 gap-5 sm:grid-cols-4">
+      {retail.map((p) => <ProductCard product={p} lang={lang} />)}
+    </div>
+
+    <!-- delivery -->
+    <h2 class="mt-14 text-2xl font-extrabold tracking-tight text-navy-900">{c.products.groups.delivery}</h2>
+    <div class="mt-6 grid grid-cols-2 gap-5 sm:grid-cols-4">
+      {delivery.map((p) => <ProductCard product={p} lang={lang} />)}
+    </div>
+
+    <p class="mt-8 flex items-center justify-center gap-2 text-center text-sm text-navy-900/60">
+      <Icon name="truck" class="h-4 w-4 text-aqua-500" />
+      {c.products.orderNote}
+    </p>
+  </section>
+
+  <!-- DISPENSER -->
+  <section class="bg-navy-900 text-white">
+    <div class="container-x grid items-center gap-10 py-16 lg:grid-cols-2 lg:py-24">
+      <div class="relative flex justify-center">
+        <div class="absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-aqua-500/20 blur-3xl"></div>
+        <Image
+          src={dispenserImage}
+          alt={`${brand.name} ${c.products.dispenserTitle}`}
+          width={300}
+          height={420}
+          class="relative h-[360px] w-auto object-contain drop-shadow-2xl"
+        />
+      </div>
+      <div>
+        <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">{c.products.dispenserTitle}</h2>
+        <p class="mt-5 max-w-lg text-lg leading-relaxed text-white/75">{c.products.dispenserText}</p>
+        <ul class="mt-8 space-y-4">
+          <li class="flex items-start gap-3">
+            <span class="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-aqua-500 text-white">
+              <Icon name="check" class="h-4 w-4" />
+            </span>
+            <span class="text-white/85">{c.offers.freeDispenser.text}</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-aqua-500 text-white">
+              <Icon name="sparkle" class="h-4 w-4" />
+            </span>
+            <span class="text-white/85">
+              {c.offers.cleaning.title} — {dispenserCleaningPrice.toLocaleString('hy-AM')} {c.currencyLabel}
+            </span>
+          </li>
+        </ul>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <Button href={links.tel} variant="white" size="lg">
+            <Icon name="phone" class="h-5 w-5" />
+            {c.cta.orderNow}
+          </Button>
+          <Button href={links.whatsapp} variant="outlineWhite" size="lg" target="_blank" rel="noopener">
+            <Icon name="whatsapp" class="h-5 w-5" />
+            {c.cta.whatsapp}
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

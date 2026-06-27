@@ -1,0 +1,427 @@
+---
+import { Image } from 'astro:assets';
+import Base from '@/layouts/Base.astro';
+import Icon from '@/components/Icon.astro';
+import Button from '@/components/Button.astro';
+import ProductCard from '@/components/ProductCard.astro';
+import HowItWorks from '@/components/HowItWorks.astro';
+import WhyBottle from '@/components/WhyBottle.astro';
+import TrustSection from '@/components/TrustSection.astro';
+import { getContent } from '@/i18n/content';
+import { localizePath, type Lang } from '@/i18n/ui';
+import { products, links, brand } from '@/data/business';
+import heroBg from '@/assets/backgrounds/hero-bg.jpg';
+import heroBottle from '@/assets/backgrounds/hero-bottle.png';
+import heroSplash from '@/assets/backgrounds/hero-splash.png';
+
+// Slow-rising bubbles (right side only, so the left stays clean for text).
+const bubbles = [
+  { l: '57%', s: 10, d: 13, delay: 0 },
+  { l: '63%', s: 6, d: 10, delay: 3.5 },
+  { l: '69%', s: 15, d: 17, delay: 1.5 },
+  { l: '74%', s: 8, d: 12, delay: 6 },
+  { l: '80%', s: 12, d: 15, delay: 2.5 },
+  { l: '86%', s: 7, d: 10, delay: 8 },
+  { l: '91%', s: 13, d: 18, delay: 4.5 },
+  { l: '83%', s: 6, d: 11, delay: 9.5 },
+  { l: '66%', s: 9, d: 14, delay: 7 },
+];
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const c = getContent(lang);
+const meta = c.meta.home;
+
+const offerItems = [
+  { ...c.offers.freeDelivery, icon: 'truck' as const },
+  { ...c.offers.freeDispenser, icon: 'droplet' as const },
+  { ...c.offers.cleaning, icon: 'sparkle' as const },
+];
+---
+<Base lang={lang} title={meta.title} description={meta.description} path="/">
+  <!-- HERO -->
+  <section class="relative overflow-hidden">
+    <!-- layered animated background -->
+    <div class="hero-stack absolute inset-0 -z-10 isolate" data-hero>
+      <!-- back plate: water, mountains, light, back splash -->
+      <Image
+        src={heroBg}
+        alt=""
+        aria-hidden="true"
+        widths={[768, 1280, 1672]}
+        sizes="100vw"
+        class="hero-layer hero-bg"
+        loading="eager"
+        fetchpriority="high"
+      />
+      <!-- slow rising bubbles (right side only) -->
+      <div class="hero-bubbles" aria-hidden="true">
+        {bubbles.map((b) => (
+          <span class="hero-bubble" style={`--l:${b.l}; --s:${b.s}px; --d:${b.d}s; --delay:${b.delay}s;`} />
+        ))}
+      </div>
+      <!-- the bottle: zooms in on load, then floats -->
+      <div class="hero-bottle-wrap">
+        <Image
+          src={heroBottle}
+          alt={`${brand.name} 19 L`}
+          widths={[768, 1280, 1672]}
+          sizes="100vw"
+          class="hero-bottle"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+      <!-- front splash: transparent PNG, sits in front of the bottle -->
+      <Image
+        src={heroSplash}
+        alt=""
+        aria-hidden="true"
+        widths={[768, 1280, 1672]}
+        sizes="100vw"
+        class="hero-layer hero-splash"
+        loading="eager"
+      />
+      <!-- left-to-right light scrim for text legibility -->
+      <div class="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-white/25 sm:via-white/70 sm:to-transparent"></div>
+      <!-- soft fade into the trust bar -->
+      <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent"></div>
+    </div>
+
+    <div class="container-x flex min-h-[540px] items-center py-16 lg:min-h-[640px] lg:py-24">
+      <div class="max-w-xl">
+        <span class="inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-1.5 text-sm font-semibold text-aqua-700 shadow-sm ring-1 ring-aqua-100 backdrop-blur">
+          <Icon name="mountain" class="h-4 w-4" />
+          {c.home.heroBadge}
+        </span>
+        <h1 class="mt-5 text-4xl font-extrabold leading-[1.1] tracking-tight text-navy-900 drop-shadow-sm sm:text-5xl lg:text-6xl">
+          {c.home.heroTitle}
+        </h1>
+        <p class="mt-5 max-w-lg text-lg leading-relaxed text-navy-900/80">
+          {c.home.heroSubtitle}
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <Button href={localizePath('/contact', lang)} variant="primary" size="lg">
+            <Icon name="droplet" class="h-5 w-5" />
+            {c.cta.orderNow}
+          </Button>
+          <Button href={localizePath('/products', lang)} variant="secondary" size="lg">
+            {c.cta.viewProducts}
+            <Icon name="arrow-right" class="h-5 w-5" />
+          </Button>
+        </div>
+      </div>
+    </div>
+
+    <!-- trust bar -->
+    <div class="relative border-t border-aqua-100 bg-white/85 backdrop-blur">
+      <div class="container-x grid grid-cols-2 divide-x divide-aqua-100 py-6 lg:grid-cols-4">
+        {
+          c.home.trust.map((t) => (
+            <div class="px-3 text-center">
+              <p class="text-xl font-extrabold text-aqua-600 sm:text-2xl">{t.value}</p>
+              <p class="mt-1 text-xs font-medium text-navy-900/60 sm:text-sm">{t.label}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <HowItWorks lang={lang} />
+
+  <!-- WHY US (sticky scrolling bottle) -->
+  <WhyBottle lang={lang} />
+
+  <!-- SOURCE TEASER -->
+  <section class="source-dark relative overflow-hidden bg-navy-900 text-white">
+    <!-- subtle animated backdrop -->
+    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+      <div class="source-glow source-glow-1"></div>
+      <div class="source-glow source-glow-2"></div>
+      <div class="source-caustics"></div>
+      <Image src={heroBottle} alt="" width={520} height={680} class="source-silhouette" />
+    </div>
+    <div class="container-x relative grid items-center gap-10 py-16 lg:grid-cols-2 lg:py-24">
+      <div>
+        <span class="inline-flex items-center gap-2 text-sm font-semibold text-aqua-300">
+          <Icon name="mountain" class="h-5 w-5" />
+          {c.tagline}
+        </span>
+        <h2 class="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">{c.home.sourceTeaser.title}</h2>
+        <p class="mt-5 max-w-lg text-lg leading-relaxed text-white/70">{c.home.sourceTeaser.text}</p>
+        <div class="mt-8">
+          <Button href={localizePath('/water', lang)} variant="white" size="lg">
+            {c.cta.learnMore}
+            <Icon name="arrow-right" class="h-5 w-5" />
+          </Button>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-4">
+        {
+          [
+            { value: 'pH 9.0', label: 'Ալկալային ջուր' },
+            { value: '162.9', label: 'Հանքայնացում (մգ/լ)' },
+            { value: '10.3', label: 'Ցածր նատրիում (մգ/լ)' },
+          ].map((s) => (
+            <div class="rounded-2xl bg-white/5 p-5 text-center ring-1 ring-white/10">
+              <p class="text-2xl font-extrabold text-aqua-300">{s.value}</p>
+              <p class="mt-1 text-xs text-white/60">{s.label}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS TEASER -->
+  <section class="container-x py-16 lg:py-24">
+    <div class="flex flex-col items-center text-center">
+      <h2 class="text-3xl font-extrabold tracking-tight text-navy-900 sm:text-4xl">{c.home.productsTeaserTitle}</h2>
+      <p class="mt-3 max-w-xl text-navy-900/65">{c.home.productsTeaserSubtitle}</p>
+    </div>
+    <div class="mt-12 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-6">
+      {products.map((p) => <ProductCard product={p} lang={lang} />)}
+    </div>
+    <div class="mt-10 text-center">
+      <Button href={localizePath('/products', lang)} variant="secondary" size="lg">
+        {c.cta.viewProducts}
+        <Icon name="arrow-right" class="h-5 w-5" />
+      </Button>
+    </div>
+  </section>
+
+  <!-- TRUST / CERTIFICATE -->
+  <TrustSection lang={lang} />
+
+  <!-- OFFERS -->
+  <section class="bg-aqua-50/60 py-16 lg:py-24">
+    <div class="container-x">
+      <div class="flex flex-col items-center text-center">
+        <h2 class="text-3xl font-extrabold tracking-tight text-navy-900 sm:text-4xl">{c.home.offersTitle}</h2>
+        <p class="mt-3 max-w-xl text-navy-900/65">{c.home.offersSubtitle}</p>
+      </div>
+      <div class="mt-12 grid gap-6 md:grid-cols-3">
+        {
+          offerItems.map((o) => (
+            <div class="rounded-2xl bg-white p-7 shadow-sm ring-1 ring-navy-900/5">
+              <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-aqua-500 text-white">
+                <Icon name={o.icon} class="h-6 w-6" />
+              </div>
+              <h3 class="mt-4 text-lg font-bold text-navy-900">{o.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-navy-900/65">{o.text}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <section class="bg-gradient-to-r from-aqua-600 to-aqua-500">
+    <div class="container-x flex flex-col items-center gap-6 py-14 text-center lg:flex-row lg:justify-between lg:text-left">
+      <div>
+        <h2 class="text-2xl font-extrabold text-white sm:text-3xl">{c.home.ctaBand.title}</h2>
+        <p class="mt-2 max-w-xl text-white/85">{c.home.ctaBand.text}</p>
+      </div>
+      <div class="flex flex-wrap justify-center gap-3">
+        <Button href={links.tel} variant="white" size="lg">
+          <Icon name="phone" class="h-5 w-5" />
+          {brand.phoneDisplay}
+        </Button>
+        <Button href={links.whatsapp} variant="outlineWhite" size="lg" target="_blank" rel="noopener">
+          <Icon name="whatsapp" class="h-5 w-5" />
+          {c.cta.whatsapp}
+        </Button>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Shared layer base */
+  .hero-layer,
+  .hero-bottle,
+  .hero-bottle-wrap {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: 68% center;
+    will-change: transform;
+  }
+  .hero-layer {
+    transition: translate 0.4s ease-out;
+  }
+
+  /* Back plate — slow Ken Burns + gentle parallax */
+  .hero-bg {
+    animation: heroKenBurns 26s ease-in-out infinite alternate;
+    translate: calc(var(--mx, 0) * 6px) calc(var(--my, 0) * 6px);
+  }
+
+  /* Bottle — zoom in on load, then float; parallax on the wrapper */
+  .hero-bottle-wrap {
+    transform-origin: 72% 52%;
+    animation: heroBottleIn 1.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    transition: translate 0.4s ease-out;
+    translate: calc(var(--mx, 0) * -14px) calc(var(--my, 0) * -9px);
+  }
+  .hero-bottle {
+    animation: heroFloat 7s ease-in-out infinite;
+    animation-delay: 1.4s;
+  }
+
+  /* Front splash — real alpha PNG, soft drift + more parallax for foreground depth */
+  .hero-splash {
+    opacity: 0.95;
+    animation: heroSplashDrift 9s ease-in-out infinite;
+    translate: calc(var(--mx, 0) * -26px) calc(var(--my, 0) * -15px);
+  }
+
+  /* Bubbles */
+  .hero-bubbles {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .hero-bubble {
+    position: absolute;
+    bottom: -24px;
+    left: var(--l);
+    width: var(--s);
+    height: var(--s);
+    border-radius: 9999px;
+    background: radial-gradient(circle at 32% 30%, rgba(255, 255, 255, 0.95), rgba(173, 216, 240, 0.2));
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+    opacity: 0;
+    animation: bubbleRise var(--d) linear infinite;
+    animation-delay: var(--delay);
+  }
+
+  @keyframes heroKenBurns {
+    from { transform: scale(1.04); }
+    to { transform: scale(1.12); }
+  }
+  @keyframes heroBottleIn {
+    from { transform: scale(1.08); }
+    to { transform: scale(1); }
+  }
+  @keyframes heroFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes heroSplashDrift {
+    0%, 100% { transform: scale(1) translateY(0); }
+    50% { transform: scale(1.03) translateY(-5px); }
+  }
+  @keyframes bubbleRise {
+    0% { transform: translateY(0) scale(0.5); opacity: 0; }
+    15% { opacity: 0.6; }
+    85% { opacity: 0.45; }
+    100% { transform: translateY(-360px) scale(1); opacity: 0; }
+  }
+
+  /* Source teaser dark polish */
+  .source-glow {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(64px);
+  }
+  .source-glow-1 {
+    width: 26rem;
+    height: 26rem;
+    top: -7rem;
+    left: -5rem;
+    background: radial-gradient(circle, rgba(54, 186, 246, 0.5), transparent 70%);
+    animation: glowFloat1 16s ease-in-out infinite alternate;
+  }
+  .source-glow-2 {
+    width: 22rem;
+    height: 22rem;
+    bottom: -7rem;
+    right: 18%;
+    background: radial-gradient(circle, rgba(12, 162, 230, 0.4), transparent 70%);
+    animation: glowFloat2 20s ease-in-out infinite alternate;
+  }
+  .source-caustics {
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 28px);
+    mix-blend-mode: screen;
+    opacity: 0.6;
+    animation: causticsDrift 16s linear infinite;
+  }
+  .source-silhouette {
+    position: absolute;
+    right: -2rem;
+    bottom: -3rem;
+    height: 118%;
+    width: auto;
+    object-fit: contain;
+    opacity: 0.06;
+    filter: blur(2px);
+  }
+  @keyframes glowFloat1 {
+    from { transform: translate(0, 0); }
+    to { transform: translate(32px, 22px); }
+  }
+  @keyframes glowFloat2 {
+    from { transform: translate(0, 0); }
+    to { transform: translate(-30px, -16px); }
+  }
+  @keyframes causticsDrift {
+    from { background-position: 0 0; }
+    to { background-position: 220px 90px; }
+  }
+
+  /* Accessibility: kill all hero motion for users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-bg,
+    .hero-bottle-wrap,
+    .hero-bottle,
+    .hero-splash,
+    .source-glow,
+    .source-caustics {
+      animation: none !important;
+    }
+    .hero-bg,
+    .hero-bottle-wrap,
+    .hero-splash {
+      translate: none !important;
+    }
+    .hero-bubbles {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // Subtle mouse parallax — desktop pointers only, and never when reduced motion is requested.
+  const stack = document.querySelector<HTMLElement>('[data-hero]');
+  const section = stack?.closest('section');
+  const fine = matchMedia('(pointer: fine)').matches;
+  const motionOK = matchMedia('(prefers-reduced-motion: no-preference)').matches;
+  if (stack && section && fine && motionOK) {
+    let raf = 0;
+    section.addEventListener('mousemove', (e) => {
+      const r = section.getBoundingClientRect();
+      const mx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+      const my = ((e.clientY - r.top) / r.height - 0.5) * 2;
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        stack.style.setProperty('--mx', mx.toFixed(3));
+        stack.style.setProperty('--my', my.toFixed(3));
+      });
+    });
+    section.addEventListener('mouseleave', () => {
+      stack.style.setProperty('--mx', '0');
+      stack.style.setProperty('--my', '0');
+    });
+  }
+</script>

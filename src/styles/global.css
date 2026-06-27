@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+/*
+  AQUA №1 design tokens.
+  Palette derived from the brand logo: bright azure splash + deep navy wordmark on white.
+  Edit these values to retune the whole site's color.
+*/
+@theme {
+  /* Primary azure (the splash blue) */
+  --color-aqua-50: #f0f9ff;
+  --color-aqua-100: #e0f3fe;
+  --color-aqua-200: #b9e6fd;
+  --color-aqua-300: #7cd2fb;
+  --color-aqua-400: #36baf6;
+  --color-aqua-500: #0ca2e6;
+  --color-aqua-600: #0285c4;
+  --color-aqua-700: #06699e;
+  --color-aqua-800: #0a5882;
+  --color-aqua-900: #0e486b;
+  --color-aqua-950: #092e4a;
+
+  /* Deep navy (the "N°1" wordmark / headings & text) */
+  --color-navy-700: #163a73;
+  --color-navy-800: #112c57;
+  --color-navy-900: #0b2545;
+  --color-navy-950: #071a33;
+
+  /* Fonts (faces are loaded in Base.astro via @fontsource) */
+  --font-sans: "Noto Sans Armenian Variable", "Noto Sans Variable", ui-sans-serif,
+    system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* Base element defaults */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-navy-900);
+  background-color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Reusable layout container */
+@utility container-x {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 80rem; /* 1280px */
+  padding-inline: 1.25rem;
+  @media (width >= 768px) {
+    padding-inline: 2rem;
+  }
+}

@@ -1,0 +1,72 @@
+---
+// Font faces (variable) — Armenian first so Armenian glyphs always resolve,
+// Noto Sans covers Latin + Cyrillic for the EN/RU versions.
+import '@fontsource-variable/noto-sans-armenian';
+import '@fontsource-variable/noto-sans';
+import '@/styles/global.css';
+
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import WhatsAppFloat from '@/components/WhatsAppFloat.astro';
+import { defaultLang, liveLocales, localizePath, stripLang, type Lang } from '@/i18n/ui';
+import { logoImg } from '@/data/business';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  /** Canonical (locale-free) path, e.g. "/products". */
+  path: string;
+}
+const { lang, title, description, path } = Astro.props;
+const canonical = stripLang(path === '/' ? '/' : path);
+
+const canonicalUrl = new URL(localizePath(canonical, lang), Astro.site).href;
+const ogImage = new URL(logoImg.src, Astro.site).href;
+const alternates = liveLocales.map((l) => ({
+  lang: l,
+  url: new URL(localizePath(canonical, l), Astro.site).href,
+}));
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {alternates.map((a) => <link rel="alternate" hreflang={a.lang} href={a.url} />)}
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href={new URL(localizePath(canonical, defaultLang), Astro.site).href}
+    />
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="AQUA №1" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="theme-color" content="#0ca2e6" />
+  </head>
+  <body class="min-h-screen bg-white">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-aqua-500 focus:px-4 focus:py-2 focus:text-white"
+    >
+      Skip to content
+    </a>
+    <Header lang={lang} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    <WhatsAppFloat />
+  </body>
+</html>

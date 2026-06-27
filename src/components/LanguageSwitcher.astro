@@ -1,0 +1,52 @@
+---
+import {
+  shortLang,
+  locales,
+  liveLocales,
+  languages,
+  stripLang,
+  localizePath,
+  type Lang,
+} from '@/i18n/ui';
+
+interface Props {
+  lang: Lang;
+  class?: string;
+}
+const { lang, class: className = '' } = Astro.props;
+const canonical = stripLang(Astro.url.pathname);
+---
+<div class={`flex items-center gap-0.5 text-xs font-bold ${className}`} role="group" aria-label="Language">
+  {
+    locales.map((l) => {
+      const isLive = liveLocales.includes(l);
+      const isActive = l === lang;
+      if (!isLive) {
+        return (
+          <span
+            class="rounded-full px-2.5 py-1 text-navy-900/30 cursor-default"
+            title="Շուտով / Soon"
+            aria-disabled="true"
+          >
+            {shortLang[l]}
+          </span>
+        );
+      }
+      return (
+        <a
+          href={localizePath(canonical, l)}
+          hreflang={l}
+          aria-label={languages[l]}
+          aria-current={isActive ? 'true' : undefined}
+          class={`rounded-full px-2.5 py-1 transition-colors ${
+            isActive
+              ? 'bg-aqua-100 text-aqua-700'
+              : 'text-navy-700 hover:bg-aqua-50 hover:text-aqua-600'
+          }`}
+        >
+          {shortLang[l]}
+        </a>
+      );
+    })
+  }
+</div>
