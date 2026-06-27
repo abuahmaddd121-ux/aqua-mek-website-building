@@ -87,10 +87,12 @@ const offerItems = [
         class="hero-layer hero-splash"
         loading="eager"
       />
-      <!-- left-to-right light scrim for text legibility -->
-      <div class="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-white/25 sm:via-white/70 sm:to-transparent"></div>
-      <!-- soft fade into the trust bar -->
-      <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent"></div>
+      <!-- left-to-right light scrim for text legibility (fades out near the bottom so the
+           stats bar sits over the open image full-width) -->
+      <div
+        class="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-white/25 sm:via-white/70 sm:to-transparent"
+        style="-webkit-mask-image:linear-gradient(to bottom,#000 62%,transparent 90%);mask-image:linear-gradient(to bottom,#000 62%,transparent 90%)"
+      ></div>
     </div>
 
     <div class="container-x flex min-h-[540px] items-center py-16 lg:min-h-[640px] lg:py-24">
@@ -118,14 +120,14 @@ const offerItems = [
       </div>
     </div>
 
-    <!-- trust bar -->
-    <div class="relative border-t border-aqua-100 bg-white/85 backdrop-blur">
-      <div class="container-x grid grid-cols-2 divide-x divide-aqua-100 py-6 lg:grid-cols-4">
+    <!-- trust bar: glassy, hero image shows through the top, fades to white at the bottom -->
+    <div class="relative bg-gradient-to-b from-white/10 via-white/55 to-white backdrop-blur-md">
+      <div class="container-x grid grid-cols-2 divide-x divide-navy-900/10 py-7 lg:grid-cols-4">
         {
           c.home.trust.map((t) => (
             <div class="px-3 text-center">
-              <p class="text-xl font-extrabold text-aqua-600 sm:text-2xl">{t.value}</p>
-              <p class="mt-1 text-xs font-medium text-navy-900/60 sm:text-sm">{t.label}</p>
+              <p class="text-xl font-extrabold text-aqua-700 drop-shadow-sm sm:text-2xl">{t.value}</p>
+              <p class="mt-1 text-xs font-medium text-navy-900/70 sm:text-sm">{t.label}</p>
             </div>
           ))
         }
