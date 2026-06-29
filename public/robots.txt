@@ -1,4 +1,7 @@
+# DEMO / concept site — keep it out of search engines so it can't compete with the
+# real AQUA №1 brand. For the real production launch, switch back to allowing indexing:
+#   User-agent: *
+#   Allow: /
+#   Sitemap: https://YOUR-REAL-DOMAIN/sitemap-index.xml
 User-agent: *
-Allow: /
-
-Sitemap: https://aqua1.am/sitemap-index.xml
+Disallow: /

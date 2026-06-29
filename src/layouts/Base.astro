@@ -33,6 +33,9 @@ const alternates = liveLocales.map((l) => ({
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- DEMO: keeps this concept out of search engines so it can't compete with the real
+         brand. REMOVE this line for the real production launch on the client's own domain. -->
+    <meta name="robots" content="noindex, nofollow" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <meta name="description" content={description} />
