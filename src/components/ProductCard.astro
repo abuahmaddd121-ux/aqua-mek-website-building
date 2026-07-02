@@ -19,6 +19,8 @@ const c = getContent(lang);
   data-size={product.size}
   data-wa={links.whatsapp}
   data-prefix={c.products.orderPrefix}
+  data-greeting={c.products.orderGreeting}
+  data-address={c.products.orderAddress}
 >
   {
     product.popular && (
@@ -96,7 +98,11 @@ const c = getContent(lang);
       const card = order.closest<HTMLElement>('[data-product]');
       if (!card) return;
       const qty = card.querySelector<HTMLElement>('[data-qty]')?.textContent || '1';
-      const text = `${card.dataset.prefix}: ${card.dataset.size} × ${qty}`;
+      const text = [
+        card.dataset.greeting,
+        `${card.dataset.prefix}: ${card.dataset.size} × ${qty}`,
+        `${card.dataset.address} `,
+      ].join('\n');
       window.open(`${card.dataset.wa}?text=${encodeURIComponent(text)}`, '_blank');
     }
   });

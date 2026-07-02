@@ -78,6 +78,8 @@ export interface SiteContent {
     perBottle: string;
     orderNote: string;
     orderPrefix: string;
+    orderGreeting: string;
+    orderAddress: string;
     badge: string;
     quantity: string;
     dispenserTitle: string;
@@ -277,6 +279,8 @@ const hy: SiteContent = {
     perBottle: '/ հատ',
     orderNote: 'Պատվիրելու համար զանգահարեք կամ գրեք մեզ WhatsApp/Viber-ով։',
     orderPrefix: 'Ուզում եմ պատվիրել',
+    orderGreeting: 'Բարև Ձեզ,',
+    orderAddress: 'Հասցե:',
     badge: 'Ամենապահանջված',
     quantity: 'Քանակ',
     dispenserTitle: 'Ջրի դիսպենսեր',
