@@ -24,7 +24,7 @@ const canonical = stripLang(Astro.url.pathname);
       if (!isLive) {
         return (
           <span
-            class="rounded-full px-2.5 py-1 text-navy-900/30 cursor-default"
+            class="rounded-full px-3 py-1.5 text-navy-900/30 cursor-default"
             title="Շուտով / Soon"
             aria-disabled="true"
           >
@@ -38,7 +38,7 @@ const canonical = stripLang(Astro.url.pathname);
           hreflang={l}
           aria-label={languages[l]}
           aria-current={isActive ? 'true' : undefined}
-          class={`rounded-full px-2.5 py-1 transition-colors ${
+          class={`rounded-full px-3 py-1.5 transition-colors ${
             isActive
               ? 'bg-aqua-100 text-aqua-700'
               : 'text-navy-700 hover:bg-aqua-50 hover:text-aqua-600'

@@ -56,23 +56,23 @@ const unitLabel = (u: (typeof minerals)[number]['unit']) => c.units[u];
         <table class="w-full text-left">
           <thead>
             <tr class="border-b border-navy-900/5 text-xs uppercase tracking-wide text-navy-900/50">
-              <th class="px-6 py-4 font-semibold">{c.water.colName}</th>
-              <th class="px-6 py-4 text-right font-semibold">{c.water.colValue}</th>
+              <th class="px-3.5 py-4 font-semibold sm:px-6">{c.water.colName}</th>
+              <th class="px-3.5 py-4 text-right font-semibold sm:px-6">{c.water.colValue}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-navy-900/5">
             {
               minerals.map((m) => (
                 <tr class="transition-colors hover:bg-aqua-50/50">
-                  <td class="px-6 py-3.5">
+                  <td class="px-3.5 py-3.5 text-sm sm:px-6 sm:text-base">
                     <span class="font-medium text-navy-900">{c.mineralNames[m.key]}</span>
                     {m.formula && (
-                      <span class="ml-2 rounded bg-aqua-50 px-1.5 py-0.5 font-mono text-xs text-aqua-700">
+                      <span class="ml-1.5 rounded bg-aqua-50 px-1.5 py-0.5 font-mono text-xs text-aqua-700 sm:ml-2">
                         {m.formula}
                       </span>
                     )}
                   </td>
-                  <td class="px-6 py-3.5 text-right font-semibold text-navy-900 tabular-nums">
+                  <td class="whitespace-nowrap px-3.5 py-3.5 text-right text-sm font-semibold text-navy-900 tabular-nums sm:px-6 sm:text-base">
                     {m.value}
                     {unitLabel(m.unit) && <span class="ml-1 text-xs font-normal text-navy-900/50">{unitLabel(m.unit)}</span>}
                   </td>

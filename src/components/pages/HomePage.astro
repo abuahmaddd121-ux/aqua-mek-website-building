@@ -168,16 +168,16 @@ const offerItems = [
           </Button>
         </div>
       </div>
-      <div class="grid grid-cols-3 gap-4">
+      <div class="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
         {
           [
             { value: 'pH 9.0', label: 'Ալկալային ջուր' },
             { value: '162.9', label: 'Հանքայնացում (մգ/լ)' },
             { value: '10.3', label: 'Ցածր նատրիում (մգ/լ)' },
           ].map((s) => (
-            <div class="rounded-2xl bg-white/5 p-5 text-center ring-1 ring-white/10">
-              <p class="text-2xl font-extrabold text-aqua-300">{s.value}</p>
-              <p class="mt-1 text-xs text-white/60">{s.label}</p>
+            <div class="flex items-center justify-between gap-3 rounded-2xl bg-white/5 px-5 py-4 ring-1 ring-white/10 sm:block sm:p-5 sm:text-center">
+              <p class="whitespace-nowrap text-xl font-extrabold text-aqua-300 sm:text-2xl">{s.value}</p>
+              <p class="text-right text-xs text-white/60 sm:mt-1 sm:text-center">{s.label}</p>
             </div>
           ))
         }
@@ -273,6 +273,13 @@ const offerItems = [
     object-fit: cover;
     object-position: 68% center;
     will-change: transform;
+  }
+  /* Mobile: shift the focal point so the bottle sits properly in frame */
+  @media (max-width: 640px) {
+    .hero-layer,
+    .hero-bottle {
+      object-position: 76% center;
+    }
   }
   .hero-layer {
     transition: translate 0.4s ease-out;
